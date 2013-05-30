@@ -1,0 +1,41 @@
+<?PHP
+/*
+ * Thanks go to VJ <meetthevj@gmail.com> for this include snippet
+ */
+// determine ZPanel root directory
+$currentDir = rtrim(dirname(__FILE__), '/\\');
+$folders = explode('/', $currentDir);
+$zpanelRoot = '';
+$i = 0;
+while ($folders[$i] != 'modules') {
+	$zpanelRoot .= $folders[$i].'/';
+	$i++;
+}
+require_once $zpanelRoot.'dryden/loader.inc.php';
+require_once $zpanelRoot.'cnf/db.php';
+require_once $zpanelRoot.'inc/dbc.inc.php';
+require_once $zpanelRoot.'dryden/db/driver.class.php';
+require_once $zpanelRoot.'dryden/ctrl/options.class.php';
+require_once $zpanelRoot.'dryden/sys/versions.class.php';
+/*
+ * End Includes
+ */
+
+function RemoveSystemOption($name) {
+    global $zdbh;
+    if(ctrl_options::GetSystemOption($name) === FALSE) {
+        return true;
+    }
+
+    $bindArray = array(
+        ':name' => $name,
+    );
+    $zdbh->bindQuery("DELETE FROM x_settings WHERE so_name_vc = :name", $bindArray);
+}
+
+//remove the options we created
+RemoveSystemOption('whmcs_reported');
+RemoveSystemOption('whmcs_sendemail_bo');
+RemoveSystemOption('whmcs_link');
+
+?>

@@ -1,0 +1,37 @@
+<?PHP
+/*
+ * Thanks go to VJ <meetthevj@gmail.com> for this include snippet
+ */
+// determine ZPanel root directory
+$currentDir = rtrim(dirname(__FILE__), '/\\');
+$folders = explode('/', $currentDir);
+$zpanelRoot = '';
+$i = 0;
+while ($folders[$i] != 'modules') {
+	$zpanelRoot .= $folders[$i].'/';
+	$i++;
+}
+require_once $zpanelRoot.'dryden/loader.inc.php';
+require_once $zpanelRoot.'cnf/db.php';
+require_once $zpanelRoot.'inc/dbc.inc.php';
+require_once $zpanelRoot.'dryden/db/driver.class.php';
+require_once $zpanelRoot.'dryden/ctrl/options.class.php';
+require_once $zpanelRoot.'dryden/sys/versions.class.php';
+/*
+ * End Includes
+ */
+
+//Create settings if not exist
+if(ctrl_options::GetSystemOption('whmcs_reported') === FALSE) {
+    ctrl_options::SetSystemOption('whmcs_reported', 'false', TRUE);
+}
+
+if(ctrl_options::GetSystemOption('whmcs_sendemail_bo') === FALSE) {
+    ctrl_options::SetSystemOption('whmcs_sendemail_bo', 'true', TRUE);
+}
+
+if(ctrl_options::GetSystemOption('whmcs_link') === FALSE) {
+    ctrl_options::SetSystemOption('whmcs_link', 'http://localhost/', TRUE);
+}
+
+?>
